@@ -81,9 +81,14 @@ def global_alignment(s1, s2):
     
     return [s1_aligned, s2_aligned, scores[n][m]]
 
-#  open file
-# parse variables
-file = open(sys.argv[1], 'r')
+# find file to open
+try:
+    file_name = sys.argv[1]
+except:
+    file_name = "test_1.txt"
+    
+# open file
+file = open(file_name, 'r')
 _ = file.readline()
 s1 = file.readline().replace("\n", "")
 _ = file.readline()
@@ -91,6 +96,7 @@ s2 = file.readline().replace("\n", "")
 
 # perform global alignment
 s1_aligned, s2_aligned, score = global_alignment(s1, s2)
-print(str(int(score)))
-print(s1_aligned)
-print(s2_aligned)
+w = open("output_q1_Nathaniel_Alberti.txt", "w")
+w.write(str(int(score)) + "\n")
+w.write(s1_aligned + "\n")
+w.write(s2_aligned)

@@ -56,9 +56,14 @@ def local_alignment(s1, s2):
     
     return [s1_aligned, s2_aligned, middle[i_max][j_max]]
 
-# open file
-# parse variables
-file = open(sys.argv[1], 'r')
+# find the file to open
+try:
+    file_name = sys.argv[1]
+except:
+    file_name = "test_1.txt"
+    
+# open the file
+file = open(file_name, 'r')
 file.readline()
 s1, s2 = "", ""
 next_seq = False
@@ -70,9 +75,10 @@ for line in file:
         s2 += line
     else:
         next_seq = True
-
+    
 # perform local alignment
 s1_aligned, s2_aligned, score = local_alignment(s1, s2)
-print(str(int(score)))
-print(s1_aligned)
-print(s2_aligned)
+w = open("output_q2_Nathaniel_Alberti.txt", "w")
+w.writelines(str(int(score)) + "\n")
+w.write(s1_aligned + "\n")
+w.write(s2_aligned)
