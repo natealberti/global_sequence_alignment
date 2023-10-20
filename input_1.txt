@@ -1,4 +1,0 @@
->Sequence 1
-PLEASANTLY
->Sequence 2
-MEANLY

@@ -4,6 +4,7 @@ import sys
 
 mat = bl.BLOSUM(62)
 
+# global alignment function
 def global_alignment(s1, s2):
     n, m = len(s1), len(s2)
     indel_penalty = -5
@@ -32,12 +33,12 @@ def global_alignment(s1, s2):
             if choice == match:
                 backtrack[i][j] = 1
                 scores[i][j] = match
-            elif choice == _insert:
-                backtrack[i][j] = -2
-                scores[i][j] = _insert
-            else:
+            elif choice == _delete:
                 backtrack[i][j] = -1
                 scores[i][j] = _delete
+            else:
+                backtrack[i][j] = -2
+                scores[i][j] = _insert
             
     # recover the aligned strings via backtrack matrix  #
     s1_aligned, s2_aligned = "", ""
@@ -55,16 +56,16 @@ def global_alignment(s1, s2):
             s2_aligned = s2[j-1] + s2_aligned
             i -= 1
             j -= 1
-        # down move / insertion
-        elif i > 0 and backtrack[i][j] == -2:
-            s1_aligned = s1[i-1] + s1_aligned
-            s2_aligned = "-" + s2_aligned
-            i -= 1
         # right move / deletion
         elif j > 0 and backtrack[i][j] == -1:
             s1_aligned = "-" + s1_aligned
             s2_aligned = s2[j-1] + s2_aligned
             j -= 1
+        # down move / insertion
+        elif i > 0 and backtrack[i][j] == -2:
+            s1_aligned = s1[i-1] + s1_aligned
+            s2_aligned = "-" + s2_aligned
+            i -= 1
 
     # perform any insertions at start if necessart
     while i > 0:
@@ -81,12 +82,14 @@ def global_alignment(s1, s2):
     return [s1_aligned, s2_aligned, scores[n][m]]
 
 #  open file
+# parse variables
 file = open(sys.argv[1], 'r')
-trash = file.readline()
+_ = file.readline()
 s1 = file.readline().replace("\n", "")
-trash = file.readline()
+_ = file.readline()
 s2 = file.readline().replace("\n", "")
-print(s1 + " " + s2)
+
+# perform global alignment
 s1_aligned, s2_aligned, score = global_alignment(s1, s2)
 print(str(int(score)))
 print(s1_aligned)
